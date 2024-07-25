@@ -22,15 +22,31 @@ emulator_ctl = "~/Library/Android/sdk/emulator/emulator"
 
 
 def get_list() -> List[str]:
-    (status, output) = subprocess.getstatusoutput(emulator_ctl + ' -list-avds')
-    names = []
-    if status == 0:
-        output = output.split("\n")
-        for i, buff in enumerate(output):
-            print(i, buff)
-            names.append(buff)
-    return names
+	"""
+	获取模拟器列表
+	"""
+	(status, output) = subprocess.getstatusoutput(emulator_ctl + ' -list-avds')
+	names = []
+	if status == 0:
+		output = output.split("\n")
+		for i, buff in enumerate(output):
+			names.append(buff)
+	return names
+
+
+def start_emulator(emulator: str) -> bool:
+	"""
+	启动模拟器
+	"""
+	(status, output) = subprocess.getstatusoutput(emulator_ctl + ' -avd ' + emulator)
+	return status == 0
+
+
+def main():
+	for i in get_list():
+		print(i)
+		start_emulator(i)
 
 
 if __name__ == '__main__':
-    get_list()
+	main()
